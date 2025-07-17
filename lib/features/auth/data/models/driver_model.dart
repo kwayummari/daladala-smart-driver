@@ -26,7 +26,6 @@ class DriverModel extends Driver {
 
   factory DriverModel.fromJson(Map<String, dynamic> json) {
     final userJson = json['User'] ?? {};
-    print('Parsing Driver JSON: $json');
     return DriverModel(
       id: json['driver_id'] ?? json['id'],
       firstName: userJson['first_name'] ?? '',

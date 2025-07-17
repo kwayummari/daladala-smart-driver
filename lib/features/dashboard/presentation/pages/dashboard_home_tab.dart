@@ -50,7 +50,6 @@ class _DashboardHomeTabState extends State<DashboardHomeTab> {
         title: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
             final driver = authProvider.driver;
-            print('Driver: ${driver?.firstName ?? 'Unknown'}');
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

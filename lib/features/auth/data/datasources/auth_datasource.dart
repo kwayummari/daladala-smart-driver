@@ -22,8 +22,6 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final response = await apiService.driverLogin(phone, password);
 
-      print('Login response: $response');
-
       if (response['status'] == 'success') {
         // Save token
         await apiService.saveDriverToken(response['data']['token']);
