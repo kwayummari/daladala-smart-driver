@@ -21,11 +21,13 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<LoginResultModel> login(String phone, String password) async {
     try {
       final response = await apiService.driverLogin(phone, password);
-      
+
+      print('Login response: $response');
+
       if (response['status'] == 'success') {
         // Save token
         await apiService.saveDriverToken(response['data']['token']);
-        
+
         return LoginResultModel.fromJson(response['data']);
       } else {
         throw ServerException(response['message'] ?? 'Login failed');
@@ -51,7 +53,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<DriverModel> getProfile() async {
     try {
       final response = await apiService.getDriverProfile();
-      
+
       if (response['status'] == 'success') {
         return DriverModel.fromJson(response['data']);
       } else {
@@ -67,7 +69,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<bool> updateDriverStatus(String status) async {
     try {
       final response = await apiService.updateDriverStatus(status);
-      
+
       if (response['status'] == 'success') {
         return true;
       } else {

@@ -25,13 +25,15 @@ class DriverModel extends Driver {
   });
 
   factory DriverModel.fromJson(Map<String, dynamic> json) {
+    final userJson = json['User'] ?? {};
+    print('Parsing Driver JSON: $json');
     return DriverModel(
       id: json['driver_id'] ?? json['id'],
-      firstName: json['first_name'] ?? '',
-      lastName: json['last_name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      profilePicture: json['profile_picture'],
+      firstName: userJson['first_name'] ?? '',
+      lastName: userJson['last_name'] ?? '',
+      email: userJson['email'] ?? '',
+      phone: userJson['phone'] ?? '',
+      profilePicture: userJson['profile_picture'],
       licenseNumber: json['license_number'] ?? '',
       licenseExpiry: DateTime.parse(json['license_expiry']),
       idNumber: json['id_number'] ?? '',
@@ -44,8 +46,14 @@ class DriverModel extends Driver {
           json['last_location_update'] != null
               ? DateTime.parse(json['last_location_update'])
               : null,
-      currentLatitude: double.tryParse(json['current_latitude']?.toString() ?? '0') ?? 0.0,
-      currentLongitude: double.tryParse(json['current_longitude']?.toString() ?? '0') ?? 0.0,
+      currentLatitude:
+          json['current_latitude'] != null
+              ? double.tryParse(json['current_latitude'].toString())
+              : null,
+      currentLongitude:
+          json['current_longitude'] != null
+              ? double.tryParse(json['current_longitude'].toString())
+              : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );

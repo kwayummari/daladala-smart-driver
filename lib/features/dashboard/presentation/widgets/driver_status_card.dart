@@ -14,7 +14,6 @@ class DriverStatusCard extends StatelessWidget {
       builder: (context, authProvider, child) {
         final driver = authProvider.driver;
         final isOnline = driver?.isOnline ?? false;
-        final status = driver?.status ?? 'offline';
 
         return Container(
           width: double.infinity,
@@ -23,14 +22,20 @@ class DriverStatusCard extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: isOnline
-                  ? [AppTheme.successColor, AppTheme.successColor.withOpacity(0.8)]
-                  : [AppTheme.textSecondaryColor, AppTheme.textSecondaryColor.withOpacity(0.8)],
+              colors:
+                  isOnline
+                      ? [AppTheme.primaryColor, AppTheme.primaryColor]
+                      : [
+                        AppTheme.textSecondaryColor,
+                        AppTheme.textSecondaryColor.withOpacity(0.8),
+                      ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: (isOnline ? AppTheme.successColor : AppTheme.textSecondaryColor)
+                color: (isOnline
+                        ? AppTheme.successColor
+                        : AppTheme.textSecondaryColor)
                     .withOpacity(0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
@@ -49,7 +54,9 @@ class DriverStatusCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
-                      isOnline ? Icons.radio_button_checked : Icons.radio_button_off,
+                      isOnline
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_off,
                       color: Colors.white,
                       size: 24,
                     ),
@@ -68,7 +75,7 @@ class DriverStatusCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          isOnline 
+                          isOnline
                               ? 'Ready to accept passengers'
                               : 'Go online to start accepting trips',
                           style: TextStyle(
@@ -81,15 +88,18 @@ class DriverStatusCard extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               CustomButton(
                 text: isOnline ? 'Go Offline' : 'Go Online',
-                onPressed: authProvider.isLoading ? null : () => _toggleDriverStatus(context),
+                onPressed:
+                    authProvider.isLoading
+                        ? null
+                        : () => _toggleDriverStatus(context),
                 type: ButtonType.secondary,
                 backgroundColor: Colors.white,
-                textColor: isOnline ? AppTheme.successColor : AppTheme.textSecondaryColor,
+                textColor: isOnline ? AppTheme.white : AppTheme.white,
                 borderColor: Colors.white,
                 isFullWidth: true,
                 height: 44,
@@ -105,24 +115,25 @@ class DriverStatusCard extends StatelessWidget {
   Future<void> _toggleDriverStatus(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final driver = authProvider.driver;
-    
+
     if (driver == null) return;
-    
+
     final newStatus = driver.isOnline ? 'offline' : 'online';
-    
+
     final success = await authProvider.updateDriverStatus(newStatus);
-    
+
     if (success && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            newStatus == 'online' 
+            newStatus == 'online'
                 ? 'You are now online and ready to accept trips!'
                 : 'You are now offline',
           ),
-          backgroundColor: newStatus == 'online' 
-              ? AppTheme.successColor 
-              : AppTheme.textSecondaryColor,
+          backgroundColor:
+              newStatus == 'online'
+                  ? AppTheme.successColor
+                  : AppTheme.textSecondaryColor,
           behavior: SnackBarBehavior.floating,
         ),
       );

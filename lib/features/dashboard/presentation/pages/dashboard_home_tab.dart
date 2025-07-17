@@ -50,15 +50,13 @@ class _DashboardHomeTabState extends State<DashboardHomeTab> {
         title: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
             final driver = authProvider.driver;
+            print('Driver: ${driver?.firstName ?? 'Unknown'}');
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Hello ${driver?.firstName ?? 'Driver'}!',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   'Ready to earn today?',

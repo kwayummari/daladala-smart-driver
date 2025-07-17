@@ -32,7 +32,7 @@ class TripSummaryCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -40,10 +40,10 @@ class TripSummaryCard extends StatelessWidget {
                     child: Icon(
                       Icons.route,
                       color: AppTheme.primaryColor,
-                      size: 20,
+                      size: 15,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 5),
                   Text(
                     'Today\'s Trips',
                     style: TextStyle(

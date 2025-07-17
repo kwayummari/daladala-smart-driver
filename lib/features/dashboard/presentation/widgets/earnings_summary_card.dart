@@ -34,7 +34,7 @@ class EarningsSummaryCard extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppTheme.accentColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -42,10 +42,10 @@ class EarningsSummaryCard extends StatelessWidget {
                     child: Icon(
                       Icons.account_balance_wallet,
                       color: AppTheme.accentColor,
-                      size: 20,
+                      size: 15,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 5),
                   Text(
                     'Today\'s Earnings',
                     style: TextStyle(

@@ -14,7 +14,7 @@ class QuickActionsGrid extends StatelessWidget {
         color: AppTheme.primaryColor,
         onTap: () {
           // Navigate to QR scanner
-          DefaultTabController.of(context)?.animateTo(2);
+          DefaultTabController.of(context).animateTo(2);
         },
       ),
       QuickAction(
@@ -31,7 +31,7 @@ class QuickActionsGrid extends StatelessWidget {
         color: AppTheme.infoColor,
         onTap: () {
           // Navigate to trip history
-          DefaultTabController.of(context)?.animateTo(1);
+          DefaultTabController.of(context).animateTo(1);
         },
       ),
       QuickAction(
@@ -51,7 +51,7 @@ class QuickActionsGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 1.5,
+        childAspectRatio: 1.3,
       ),
       itemCount: actions.length,
       itemBuilder: (context, index) {
