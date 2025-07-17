@@ -217,7 +217,7 @@ class _SplashScreenState extends State<SplashScreen>
                   return Opacity(
                     opacity: _textAnimation.value * 0.8,
                     child: Text(
-                      'Your Journey, Our Pride',
+                      'Jongea kwa Malengo',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.9),

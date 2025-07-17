@@ -151,19 +151,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 40),
-
-                  // Logo and Title
                   _buildHeader(),
-
-                  const SizedBox(height: 60),
-
-                  // Login Form
+                  const SizedBox(height: 20),
                   _buildLoginForm(),
-
-                  const SizedBox(height: 40),
-
-                  // Footer
+                  const SizedBox(height: 20),
                   _buildFooter(),
                 ],
               ),
@@ -177,27 +168,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _buildHeader() {
     return Column(
       children: [
-        // Logo
-        Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            color: AppTheme.primaryColor,
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.primaryColor.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Icon(Icons.local_taxi, size: 50, color: Colors.white),
-        ),
-
-        const SizedBox(height: 20),
-
-        // Title
+        Image.asset('assets/images/logo.png', height: 200, width: 200),
         Text(
           'Welcome Driver',
           style: TextStyle(
@@ -206,9 +177,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             color: AppTheme.textPrimaryColor,
           ),
         ),
-
         const SizedBox(height: 8),
-
         Text(
           'Sign in to start your journey',
           style: TextStyle(fontSize: 16, color: AppTheme.textSecondaryColor),
@@ -223,7 +192,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Phone Number Field
           CustomTextField(
             controller: _phoneController,
             focusNode: _phoneFocusNode,
@@ -240,9 +208,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               FilteringTextInputFormatter.allow(RegExp(r'[0-9+\s-]')),
             ],
           ),
-
           const SizedBox(height: 20),
-
           // Password Field
           CustomTextField(
             controller: _passwordController,
@@ -266,10 +232,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               },
             ),
           ),
-
-          const SizedBox(height: 16),
-
-          // Remember Me
+          const SizedBox(height: 10),
           Row(
             children: [
               Checkbox(
@@ -301,9 +264,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ],
           ),
 
-          const SizedBox(height: 30),
-
-          // Login Button
+          const SizedBox(height: 20),
           Consumer<AuthProvider>(
             builder: (context, authProvider, child) {
               return CustomButton(
@@ -324,7 +285,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _buildFooter() {
     return Column(
       children: [
-        // Divider
         Row(
           children: [
             Expanded(child: Divider(color: AppTheme.textTertiaryColor)),
@@ -341,10 +301,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             Expanded(child: Divider(color: AppTheme.textTertiaryColor)),
           ],
         ),
-
-        const SizedBox(height: 20),
-
-        // Support Button
+        const SizedBox(height: 10),
         OutlinedButton.icon(
           onPressed: () {
             // TODO: Open support/contact
@@ -363,7 +320,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
 
         // App Version
         Text(
