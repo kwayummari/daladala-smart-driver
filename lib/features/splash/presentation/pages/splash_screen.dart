@@ -157,16 +157,6 @@ class _SplashScreenState extends State<SplashScreen>
                     opacity: _textAnimation.value,
                     child: Column(
                       children: [
-                        Text(
-                          'Daladala Smart',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
