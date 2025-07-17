@@ -35,33 +35,45 @@ class TripModel extends Trip {
       driverId: json['driver_id'],
       vehicleId: json['vehicle_id'],
       startTime: DateTime.parse(json['start_time']),
-      endTime: json['end_time'] != null ? DateTime.parse(json['end_time']) : null,
-      actualStartTime: json['actual_start_time'] != null 
-          ? DateTime.parse(json['actual_start_time']) : null,
-      actualEndTime: json['actual_end_time'] != null 
-          ? DateTime.parse(json['actual_end_time']) : null,
+      endTime:
+          json['end_time'] != null ? DateTime.parse(json['end_time']) : null,
+      actualStartTime:
+          json['actual_start_time'] != null
+              ? DateTime.parse(json['actual_start_time'])
+              : null,
+      actualEndTime:
+          json['actual_end_time'] != null
+              ? DateTime.parse(json['actual_end_time'])
+              : null,
       status: json['status'] ?? 'pending',
       currentStopId: json['current_stop_id'],
       nextStopId: json['next_stop_id'],
-      driverLatitude: json['driver_latitude']?.toDouble(),
-      driverLongitude: json['driver_longitude']?.toDouble(),
-      lastDriverUpdate: json['last_driver_update'] != null 
-          ? DateTime.parse(json['last_driver_update']) : null,
+      driverLatitude:
+          double.tryParse(json['driver_latitude']?.toString() ?? '0') ?? 0.0,
+      driverLongitude:
+          double.tryParse(json['driver_longitude']?.toString() ?? '0') ?? 0.0,
+      lastDriverUpdate:
+          json['last_driver_update'] != null
+              ? DateTime.parse(json['last_driver_update'])
+              : null,
       currentPassengers: json['current_passengers'],
-      earnings: json['earnings']?.toDouble(),
+      earnings: double.tryParse(json['earnings']?.toString() ?? '0') ?? 0.0,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      route: json['Route'] != null || json['route'] != null
-          ? TripRouteModel.fromJson(json['Route'] ?? json['route'])
-          : null,
-      vehicle: json['Vehicle'] != null || json['vehicle'] != null
-          ? TripVehicleModel.fromJson(json['Vehicle'] ?? json['vehicle'])
-          : null,
-      passengers: json['passengers'] != null
-          ? (json['passengers'] as List)
-              .map((p) => TripPassengerModel.fromJson(p))
-              .toList()
-          : null,
+      route:
+          json['Route'] != null || json['route'] != null
+              ? TripRouteModel.fromJson(json['Route'] ?? json['route'])
+              : null,
+      vehicle:
+          json['Vehicle'] != null || json['vehicle'] != null
+              ? TripVehicleModel.fromJson(json['Vehicle'] ?? json['vehicle'])
+              : null,
+      passengers:
+          json['passengers'] != null
+              ? (json['passengers'] as List)
+                  .map((p) => TripPassengerModel.fromJson(p))
+                  .toList()
+              : null,
     );
   }
 
@@ -108,7 +120,8 @@ class TripRouteModel extends TripRoute {
       routeName: json['route_name'] ?? '',
       startPoint: json['start_point'] ?? '',
       endPoint: json['end_point'] ?? '',
-      distanceKm: json['distance_km']?.toDouble(),
+      distanceKm:
+          double.tryParse(json['distance_km']?.toString() ?? '0') ?? 0.0,
       estimatedTimeMinutes: json['estimated_time_minutes'],
     );
   }
@@ -157,22 +170,28 @@ class TripPassengerModel extends TripPassenger {
   factory TripPassengerModel.fromJson(Map<String, dynamic> json) {
     return TripPassengerModel(
       bookingId: json['booking_id'],
-      passengerName: json['passenger_name'] ?? 
+      passengerName:
+          json['passenger_name'] ??
           '${json['user']?['first_name'] ?? ''} ${json['user']?['last_name'] ?? ''}',
       passengerPhone: json['passenger_phone'] ?? json['user']?['phone'] ?? '',
       passengerCount: json['passenger_count'] ?? 1,
       seatNumbers: json['seat_numbers'],
-      pickupStopName: json['pickup_stop_name'] ?? 
-          json['pickup_stop']?['stop_name'] ?? '',
-      dropoffStopName: json['dropoff_stop_name'] ?? 
-          json['dropoff_stop']?['stop_name'] ?? '',
+      pickupStopName:
+          json['pickup_stop_name'] ?? json['pickup_stop']?['stop_name'] ?? '',
+      dropoffStopName:
+          json['dropoff_stop_name'] ?? json['dropoff_stop']?['stop_name'] ?? '',
       status: json['status'] ?? 'pending',
-      fareAmount: (json['fare_amount'] ?? 0.0).toDouble(),
+      fareAmount:
+          double.tryParse(json['fare_amount']?.toString() ?? '0') ?? 0.0,
       bookingTime: DateTime.parse(json['booking_time'] ?? json['created_at']),
-      boardingTime: json['boarding_time'] != null 
-          ? DateTime.parse(json['boarding_time']) : null,
-      disembarkingTime: json['disembarking_time'] != null 
-          ? DateTime.parse(json['disembarking_time']) : null,
+      boardingTime:
+          json['boarding_time'] != null
+              ? DateTime.parse(json['boarding_time'])
+              : null,
+      disembarkingTime:
+          json['disembarking_time'] != null
+              ? DateTime.parse(json['disembarking_time'])
+              : null,
     );
   }
 }

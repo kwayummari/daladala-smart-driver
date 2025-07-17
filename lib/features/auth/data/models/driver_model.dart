@@ -35,7 +35,7 @@ class DriverModel extends Driver {
       licenseNumber: json['license_number'] ?? '',
       licenseExpiry: DateTime.parse(json['license_expiry']),
       idNumber: json['id_number'] ?? '',
-      rating: (json['rating'] ?? 0.0).toDouble(),
+      rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
       totalRatings: json['total_ratings'] ?? 0,
       isAvailable: json['is_available'] ?? false,
       isTrackingEnabled: json['is_tracking_enabled'] ?? false,
@@ -44,8 +44,8 @@ class DriverModel extends Driver {
           json['last_location_update'] != null
               ? DateTime.parse(json['last_location_update'])
               : null,
-      currentLatitude: json['current_latitude']?.toDouble(),
-      currentLongitude: json['current_longitude']?.toDouble(),
+      currentLatitude: double.tryParse(json['current_latitude']?.toString() ?? '0') ?? 0.0,
+      currentLongitude: double.tryParse(json['current_longitude']?.toString() ?? '0') ?? 0.0,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );

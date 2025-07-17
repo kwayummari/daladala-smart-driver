@@ -29,7 +29,7 @@ class ProfileModel extends Profile {
       licenseNumber: json['license_number'] ?? '',
       licenseExpiry: DateTime.parse(json['license_expiry']),
       idNumber: json['id_number'] ?? '',
-      rating: (json['rating'] ?? 0.0).toDouble(),
+      rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
       totalRatings: json['total_ratings'] ?? 0,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

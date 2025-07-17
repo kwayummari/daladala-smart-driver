@@ -31,7 +31,7 @@ class QRValidationResultModel extends QRValidationResult {
       pickupStop: bookingData?['pickup_stop'],
       dropoffStop: bookingData?['dropoff_stop'],
       routeName: bookingData?['route_name'],
-      fareAmount: bookingData?['fare_amount']?.toDouble(),
+      fareAmount: double.tryParse(bookingData?['fare_amount']?.toString() ?? '0') ?? 0.0,
       expiresAt:
           bookingData?['expires_at'] != null
               ? DateTime.parse(bookingData['expires_at'])
