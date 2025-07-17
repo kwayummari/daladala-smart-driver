@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen>
                   return Transform.scale(
                     scale: _logoAnimation.value,
                     child: Image.asset(
-                      'assets/images/logo.png',
+                      'assets/images/splash_logo.png',
                       fit: BoxFit.cover,
                     ),
                   );
