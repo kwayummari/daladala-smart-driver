@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'core/di/service_locator.dart';
 import 'core/theme/app_theme.dart';
 import 'core/services/location_service.dart';
-import 'core/services/notification_service.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/trip/presentation/providers/trip_provider.dart';
 import 'features/qr_scanner/presentation/providers/qr_provider.dart';
