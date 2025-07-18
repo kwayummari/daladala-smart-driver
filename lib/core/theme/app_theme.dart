@@ -178,7 +178,7 @@ class AppTheme {
   // Driver status color helper
   static Color getDriverStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'online':
+      case 'online' || 'active':
       case 'available':
         return onlineColor;
       case 'offline':

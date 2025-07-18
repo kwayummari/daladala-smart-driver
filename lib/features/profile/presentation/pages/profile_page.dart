@@ -210,9 +210,7 @@ class _ProfilePageState extends State<ProfilePage>
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.getDriverStatusColor(
-                    driver.status,
-                  ).withOpacity(0.2),
+                  color: AppTheme.white.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: AppTheme.getDriverStatusColor(driver.status),
@@ -778,7 +776,7 @@ class _ProfilePageState extends State<ProfilePage>
                 ListTile(
                   leading: const Icon(Icons.phone),
                   title: const Text('Call Support'),
-                  subtitle: const Text('+255 123 456 789'),
+                  subtitle: const Text('+255 737 957082'),
                   onTap: () {
                     // TODO: Launch phone dialer
                   },
