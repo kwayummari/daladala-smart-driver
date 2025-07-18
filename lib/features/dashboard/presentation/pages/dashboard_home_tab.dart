@@ -50,22 +50,25 @@ class _DashboardHomeTabState extends State<DashboardHomeTab> {
         title: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
             final driver = authProvider.driver;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hello ${driver?.firstName ?? 'Driver'}!',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  'Ready to earn today?',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
-                    fontWeight: FontWeight.normal,
+            return Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hello ${driver?.firstName ?? 'Driver'}!',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
-                ),
-              ],
+                  Text(
+                    'Ready to earn today?',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),

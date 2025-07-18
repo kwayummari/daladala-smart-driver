@@ -182,9 +182,13 @@ class _TripsPageState extends State<TripsPage>
       foregroundColor: Colors.white,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
-        title: const Text(
+        title: Text(
           'My Trips',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: AppTheme.white,
+          ),
         ),
         titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
         background: Container(
@@ -446,7 +450,7 @@ class _TripsPageState extends State<TripsPage>
               textAlign: TextAlign.center,
             ),
 
-            if (action != null) ...[const SizedBox(height: 24), action],
+            if (action != null) ...[const SizedBox(height: 20), action],
           ],
         ),
       ),
