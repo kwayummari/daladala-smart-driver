@@ -116,6 +116,7 @@ Future<void> setupServiceLocator() async {
       logoutUseCase: getIt<LogoutUseCase>(),
       getProfileUseCase: getIt<GetProfileUseCase>(),
       updateDriverStatusUseCase: getIt<UpdateDriverStatusUseCase>(),
+      apiService: getIt<ApiService>(),
     ),
   );
 

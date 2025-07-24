@@ -90,6 +90,25 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getDriverStatistics({
+    String? startDate,
+    String? endDate,
+  }) async {
+    try {
+      final queryParams = <String, dynamic>{};
+      if (startDate != null) queryParams['start_date'] = startDate;
+      if (endDate != null) queryParams['end_date'] = endDate;
+
+      final response = await _dio.get(
+        '/drivers/statistics',
+        queryParameters: queryParams,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   // Driver Profile
   Future<Map<String, dynamic>> getDriverProfile() async {
     try {
@@ -242,9 +261,10 @@ class ApiService {
   Future<Map<String, dynamic>> getDriverEarnings({
     String? startDate,
     String? endDate,
+    String? period = 'daily', // daily, weekly, monthly
   }) async {
     try {
-      final queryParams = <String, dynamic>{};
+      final queryParams = <String, dynamic>{'period': period};
       if (startDate != null) queryParams['start_date'] = startDate;
       if (endDate != null) queryParams['end_date'] = endDate;
 
@@ -258,9 +278,165 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getAvailableRoutes() async {
+    try {
+      final response = await _dio.get('/routes');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> assignDriverToRoute(int routeId) async {
+    try {
+      final response = await _dio.post(
+        '/drivers/assign-route',
+        data: {'route_id': routeId},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+   Future<Map<String, dynamic>> createTrip({
+    required int routeId,
+    required String departureTime,
+    required double fareAmount,
+    int? maxPassengers,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/trips/create',
+        data: {
+          'route_id': routeId,
+          'departure_time': departureTime,
+          'fare_amount': fareAmount,
+          'max_passengers': maxPassengers,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> cancelTrip(int tripId, String reason) async {
+    try {
+      final response = await _dio.put(
+        '/trips/$tripId/cancel',
+        data: {'reason': reason},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> updateTripStatus({
+    required int tripId,
+    required String status,
+    String? notes,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/trips/$tripId/status',
+        data: {'status': status, 'notes': notes},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  // Passenger Boarding Management
+  Future<Map<String, dynamic>> scanPassengerQR(String qrData) async {
+    try {
+      final response = await _dio.post(
+        '/bookings/scan-qr',
+        data: {'qr_data': qrData},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> boardPassenger({
+    required int bookingId,
+    String? notes,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/bookings/$bookingId/board',
+        data: {'notes': notes},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> disembarkPassenger({
+    required int bookingId,
+    String? notes,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/bookings/$bookingId/disembark',
+        data: {'notes': notes},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getDriverVehicles() async {
+    try {
+      final response = await _dio.get('/drivers/vehicles');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> updateVehicleStatus({
+    required int vehicleId,
+    required String status,
+    String? notes,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/vehicles/$vehicleId/status',
+        data: {'status': status, 'notes': notes},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+
+
   Future<Map<String, dynamic>> getDriverStats() async {
     try {
       final response = await _dio.get('/drivers/stats');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getDriverReviews({
+    int page = 1,
+    int limit = 20,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/drivers/reviews',
+        queryParameters: {'page': page, 'limit': limit},
+      );
       return response.data;
     } on DioException catch (e) {
       throw _handleError(e);
@@ -271,17 +447,72 @@ class ApiService {
   Future<Map<String, dynamic>> getDriverNotifications({
     int page = 1,
     int limit = 20,
+    bool? unreadOnly,
   }) async {
     try {
+      final queryParams = <String, dynamic>{'page': page, 'limit': limit};
+      if (unreadOnly != null) queryParams['unread_only'] = unreadOnly;
+
       final response = await _dio.get(
-        '/notifications',
-        queryParameters: {'page': page, 'limit': limit},
+        '/drivers/notifications',
+        queryParameters: queryParams,
       );
       return response.data;
     } on DioException catch (e) {
       throw _handleError(e);
     }
   }
+
+  Future<Map<String, dynamic>> markNotificationAsRead(
+    int notificationId,
+  ) async {
+    try {
+      final response = await _dio.put('/notifications/$notificationId/read');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> reportEmergency({
+    required double latitude,
+    required double longitude,
+    required String emergencyType,
+    String? description,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/drivers/emergency',
+        data: {
+          'latitude': latitude,
+          'longitude': longitude,
+          'emergency_type': emergencyType,
+          'description': description,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> contactSupport({
+    required String subject,
+    required String message,
+    String? category,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/support/contact',
+        data: {'subject': subject, 'message': message, 'category': category},
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+
 
   Future<Map<String, dynamic>> markNotificationRead(int notificationId) async {
     try {
@@ -303,15 +534,113 @@ class ApiService {
   }
 
   // File Upload
-  Future<Map<String, dynamic>> uploadFile(File file, {String? type}) async {
+  Future<Map<String, dynamic>> uploadFile({
+    required String filePath,
+    required String fileType,
+  }) async {
     try {
-      final fileName = file.path.split('/').last;
+      final fileName = filePath.split('/').last;
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(file.path, filename: fileName),
-        if (type != null) 'type': type,
+        'file': await MultipartFile.fromFile(filePath, filename: fileName),
+        'file_type': fileType,
       });
 
-      final response = await _dio.post('/upload', data: formData);
+      final response = await _dio.post('/files/upload', data: formData);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> updateDriverDocuments({
+    String? licenseImageUrl,
+    String? idImageUrl,
+    String? vehicleRegistrationUrl,
+  }) async {
+    try {
+      final data = <String, dynamic>{};
+      if (licenseImageUrl != null) data['license_image_url'] = licenseImageUrl;
+      if (idImageUrl != null) data['id_image_url'] = idImageUrl;
+      if (vehicleRegistrationUrl != null) {
+        data['vehicle_registration_url'] = vehicleRegistrationUrl;
+      }
+
+      final response = await _dio.put('/drivers/documents', data: data);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getTripHistory({
+    String? startDate,
+    String? endDate,
+    String? status,
+    int page = 1,
+    int limit = 20,
+  }) async {
+    try {
+      final queryParams = <String, dynamic>{'page': page, 'limit': limit};
+      if (startDate != null) queryParams['start_date'] = startDate;
+      if (endDate != null) queryParams['end_date'] = endDate;
+      if (status != null) queryParams['status'] = status;
+
+      final response = await _dio.get(
+        '/drivers/trip-history',
+        queryParameters: queryParams,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getTripAnalytics({
+    String period = 'monthly', // daily, weekly, monthly, yearly
+    int? year,
+    int? month,
+  }) async {
+    try {
+      final queryParams = <String, dynamic>{'period': period};
+      if (year != null) queryParams['year'] = year;
+      if (month != null) queryParams['month'] = month;
+
+      final response = await _dio.get(
+        '/drivers/analytics',
+        queryParameters: queryParams,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getRouteDetails(int routeId) async {
+    try {
+      final response = await _dio.get('/routes/$routeId');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getRouteStops(int routeId) async {
+    try {
+      final response = await _dio.get('/routes/$routeId/stops');
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getPerformanceMetrics({
+    String period = 'monthly',
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/drivers/performance',
+        queryParameters: {'period': period},
+      );
       return response.data;
     } on DioException catch (e) {
       throw _handleError(e);

@@ -1,4 +1,5 @@
 // lib/features/auth/presentation/pages/login_page.dart
+import 'package:daladala_smart_driver/features/auth/presentation/pages/driver_registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -320,6 +321,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           ),
         ),
 
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Don't have an account? ",
+              style: TextStyle(
+                color: AppTheme.textSecondaryColor,
+                fontSize: 14,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DriverRegistrationPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Register as Driver',
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        // END OF ADDED SECTION
         const SizedBox(height: 10),
 
         // App Version

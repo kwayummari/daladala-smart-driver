@@ -23,6 +23,9 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool enabled;
   final EdgeInsetsGeometry? contentPadding;
+  final bool isPassword;
+  final bool isPasswordVisible;
+  final VoidCallback? onTogglePasswordVisibility;
 
   const CustomTextField({
     super.key,
@@ -46,6 +49,9 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.enabled = true,
     this.contentPadding,
+    this.isPassword = false,
+    this.isPasswordVisible = false,
+    this.onTogglePasswordVisibility, 
   });
 
   @override
@@ -128,7 +134,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
                               : theme.iconTheme.color?.withOpacity(0.6),
                     )
                     : null,
-            suffixIcon: widget.suffixIcon,
+            suffixIcon:  widget.isPassword
+              ? IconButton(
+                  icon: Icon(
+                    widget.isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: _isFocused
+                        ? theme.primaryColor
+                        : theme.iconTheme.color?.withOpacity(0.6),
+                  ),
+                  onPressed: widget.onTogglePasswordVisibility,
+                )
+              : widget.suffixIcon,
             contentPadding:
                 widget.contentPadding ??
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

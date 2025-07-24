@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../../../core/services/location_service.dart';
 import '../../../../core/services/socket_service.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../domain/entities/trip.dart';
 
 enum TripState { initial, loading, loaded, error }
