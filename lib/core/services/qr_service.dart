@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
-// import 'package:vibration/vibration.dart';
+import 'package:vibration/vibration.dart';
 
 class QRService {
   static final QRService _instance = QRService._internal();
@@ -145,9 +145,9 @@ class QRService {
       await _audioPlayer.play(AssetSource('sounds/scan_success.mp3'));
 
       // Vibrate
-      // if (await Vibration.hasVibrator() ?? false) {
-      //   Vibration.vibrate(duration: 200);
-      // }
+      if (await Vibration.hasVibrator()) {
+        Vibration.vibrate(duration: 200);
+      }
 
       // Haptic feedback
       HapticFeedback.lightImpact();
@@ -160,10 +160,10 @@ class QRService {
 
   Future<void> playScanError() async {
     try {
-      // Play error sound (longer vibration)
-      // if (await Vibration.hasVibrator() ?? false) {
-      //   Vibration.vibrate(duration: 500);
-      // }
+      await _audioPlayer.setSource(AssetSource('sounds/scan_error.mp3'));
+      if (await Vibration.hasVibrator()) {
+        Vibration.vibrate(duration: 500);
+      }
 
       // Error haptic feedback
       HapticFeedback.heavyImpact();

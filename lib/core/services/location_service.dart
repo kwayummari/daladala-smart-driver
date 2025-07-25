@@ -30,19 +30,20 @@ class LocationService {
 
   Future<bool> _requestPermissions() async {
     try {
-      // Request location permission
       final locationStatus = await Permission.location.request();
       if (locationStatus != PermissionStatus.granted) {
         print('❌ Location permission denied');
         return false;
       }
 
-      // Request background location permission for tracking
-      final backgroundLocationStatus =
-          await Permission.locationAlways.request();
-      if (backgroundLocationStatus != PermissionStatus.granted) {
+      final backgroundStatus = await Permission.locationAlways.request();
+      if (backgroundStatus != PermissionStatus.granted) {
         print('⚠️ Background location permission denied');
-        // Continue without background location for now
+
+        // On Android 11+, you have to manually tell user to enable it
+        await openAppSettings(); // Open settings screen for manual enable
+
+        return false;
       }
 
       return true;
@@ -51,6 +52,7 @@ class LocationService {
       return false;
     }
   }
+
 
   Future<bool> isLocationServiceEnabled() async {
     return await Geolocator.isLocationServiceEnabled();

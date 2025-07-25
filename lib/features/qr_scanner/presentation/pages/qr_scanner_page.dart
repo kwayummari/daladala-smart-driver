@@ -58,129 +58,132 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-        title: const Text('Scan Passenger QR'),
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: _toggleFlash,
-            icon: Icon(
-              _isFlashOn ? Icons.flash_on : Icons.flash_off,
-              color: Colors.white,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          title: const Text('Scan Passenger QR'),
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: _toggleFlash,
+              icon: Icon(
+                _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Consumer<QRProvider>(
-        builder: (context, qrProvider, child) {
-          return Stack(
-            children: [
-              // QR Scanner View
-              if (qrProvider.state != QRScanState.success &&
-                  qrProvider.state != QRScanState.error) ...[
-                Expanded(
-                  child: QRView(
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated,
-                    overlay: QrScannerOverlayShape(
-                      borderColor: AppTheme.primaryColor,
-                      borderRadius: 10,
-                      borderLength: 30,
-                      borderWidth: 10,
-                      cutOutSize: 250,
+          ],
+        ),
+        body: Consumer<QRProvider>(
+          builder: (context, qrProvider, child) {
+            return Stack(
+              children: [
+                // QR Scanner View
+                if (qrProvider.state != QRScanState.success &&
+                    qrProvider.state != QRScanState.error) ...[
+                  Expanded(
+                    child: QRView(
+                      key: qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                      overlay: QrScannerOverlayShape(
+                        borderColor: AppTheme.primaryColor,
+                        borderRadius: 10,
+                        borderLength: 30,
+                        borderWidth: 10,
+                        cutOutSize: 250,
+                      ),
                     ),
                   ),
-                ),
-                
-                // Scanner Overlay
-                const QRScannerOverlay(),
-              ],
-
-              // Validation Result
-              if (qrProvider.state == QRScanState.success ||
-                  qrProvider.state == QRScanState.error) ...[
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.black.withOpacity(0.8),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
+                  
+                  // Scanner Overlay
+                  const QRScannerOverlay(),
+                ],
+      
+                // Validation Result
+                if (qrProvider.state == QRScanState.success ||
+                    qrProvider.state == QRScanState.error) ...[
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black.withOpacity(0.8),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            QRValidationResultCard(
+                              result: qrProvider.validationResult,
+                              error: qrProvider.errorMessage,
+                            ),
+                            
+                            const SizedBox(height: 24),
+                            
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CustomButton(
+                                    text: 'Scan Again',
+                                    onPressed: _scanAgain,
+                                    type: ButtonType.secondary,
+                                    backgroundColor: Colors.white,
+                                    textColor: AppTheme.primaryColor,
+                                    borderColor: Colors.white,
+                                  ),
+                                ),
+                                if (qrProvider.state == QRScanState.success) ...[
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: CustomButton(
+                                      text: 'Mark Boarded',
+                                      onPressed: () => _markPassengerBoarded(context),
+                                      type: ButtonType.primary,
+                                      backgroundColor: AppTheme.successColor,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+      
+                // Loading Overlay
+                if (qrProvider.state == QRScanState.validating) ...[
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black.withOpacity(0.8),
+                    child: const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          QRValidationResultCard(
-                            result: qrProvider.validationResult,
-                            error: qrProvider.errorMessage,
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
-                          
-                          const SizedBox(height: 24),
-                          
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomButton(
-                                  text: 'Scan Again',
-                                  onPressed: _scanAgain,
-                                  type: ButtonType.secondary,
-                                  backgroundColor: Colors.white,
-                                  textColor: AppTheme.primaryColor,
-                                  borderColor: Colors.white,
-                                ),
-                              ),
-                              if (qrProvider.state == QRScanState.success) ...[
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: CustomButton(
-                                    text: 'Mark Boarded',
-                                    onPressed: () => _markPassengerBoarded(context),
-                                    type: ButtonType.primary,
-                                    backgroundColor: AppTheme.successColor,
-                                  ),
-                                ),
-                              ],
-                            ],
+                          SizedBox(height: 16),
+                          Text(
+                            'Validating QR Code...',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
+                ],
               ],
-
-              // Loading Overlay
-              if (qrProvider.state == QRScanState.validating) ...[
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.black.withOpacity(0.8),
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'Validating QR Code...',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

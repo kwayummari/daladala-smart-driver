@@ -1,5 +1,5 @@
-// lib/features/auth/presentation/providers/auth_provider.dart
 import 'package:daladala_smart_driver/core/services/api_service.dart';
+import 'package:daladala_smart_driver/features/auth/domain/entities/driver_vehicle.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../domain/entities/driver.dart';
@@ -29,10 +29,12 @@ class AuthProvider extends ChangeNotifier {
   Driver? _driver;
   String? _errorMessage;
   bool _isLoading = false;
+  DriverVehicle? _vehicle;
 
   // Getters
   AuthState get state => _state;
   Driver? get driver => _driver;
+  DriverVehicle? get vehicle => _vehicle;
   String? get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
   bool get isAuthenticated =>
@@ -284,7 +286,7 @@ class AuthProvider extends ChangeNotifier {
           return false;
         },
         (loginResult) {
-          _driver = loginResult.driver;
+          _driver = loginResult!.driver;
           _setState(AuthState.authenticated);
           return true;
         },

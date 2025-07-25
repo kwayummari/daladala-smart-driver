@@ -19,12 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 
-  final List<Widget> _pages = [
-    const DashboardHomeTab(),
-    const TripsPage(),
-    const QRScannerPage(),
-    const ProfilePage(),
-  ];
+  late final List<Widget> _pages;
 
   final List<BottomNavigationBarItem> _navItems = [
     BottomNavigationBarItem(
@@ -54,6 +49,12 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     _pageController = PageController();
     _initializeApp();
+    _pages = [
+      DashboardHomeTab(onViewAllTapped: () => _onTabTapped(1)),
+      const TripsPage(),
+      const QRScannerPage(),
+      const ProfilePage(),
+    ];
   }
 
   Future<void> _initializeApp() async {

@@ -1,4 +1,6 @@
-// lib/features/auth/data/models/driver_model.dart
+import 'package:daladala_smart_driver/features/auth/domain/entities/driver_vehicle.dart';
+import 'package:daladala_smart_driver/features/auth/domain/entities/login_result.dart';
+
 import '../../domain/entities/driver.dart';
 
 class DriverModel extends Driver {

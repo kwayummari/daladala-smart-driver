@@ -1,4 +1,5 @@
 // lib/core/di/service_locator.dart
+import 'package:daladala_smart_driver/features/auth/domain/entities/driver_vehicle.dart';
 import 'package:daladala_smart_driver/features/auth/domain/repositories/auth_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 import '../services/api_service.dart';

@@ -1,4 +1,3 @@
-// lib/features/auth/domain/entities/driver.dart
 import 'package:equatable/equatable.dart';
 
 class Driver extends Equatable {
@@ -70,51 +69,4 @@ class Driver extends Equatable {
     createdAt,
     updatedAt,
   ];
-}
-
-// lib/features/auth/domain/entities/driver_vehicle.dart
-class DriverVehicle extends Equatable {
-  final int vehicleId;
-  final String plateNumber;
-  final String vehicleType;
-  final String model;
-  final String? color;
-  final int capacity;
-  final bool isAirConditioned;
-  final bool isActive;
-
-  const DriverVehicle({
-    required this.vehicleId,
-    required this.plateNumber,
-    required this.vehicleType,
-    required this.model,
-    this.color,
-    required this.capacity,
-    required this.isAirConditioned,
-    required this.isActive,
-  });
-
-  @override
-  List<Object?> get props => [
-    vehicleId,
-    plateNumber,
-    vehicleType,
-    model,
-    color,
-    capacity,
-    isAirConditioned,
-    isActive,
-  ];
-}
-
-// lib/features/auth/domain/entities/login_result.dart
-class LoginResult extends Equatable {
-  final Driver driver;
-  final String token;
-  final DriverVehicle? vehicle;
-
-  const LoginResult({required this.driver, required this.token, this.vehicle});
-
-  @override
-  List<Object?> get props => [driver, token, vehicle];
 }

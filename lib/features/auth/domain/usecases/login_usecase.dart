@@ -1,5 +1,4 @@
-// lib/features/auth/domain/usecases/login_usecase.dart
-import 'package:daladala_smart_driver/features/auth/domain/entities/driver.dart';
+import 'package:daladala_smart_driver/features/auth/domain/entities/login_result.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';

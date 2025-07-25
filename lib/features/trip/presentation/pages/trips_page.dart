@@ -106,69 +106,74 @@ class _TripsPageState extends State<TripsPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      body: Consumer<TripProvider>(
-        builder: (context, tripProvider, child) {
-          return CustomScrollView(
-            slivers: [
-              // Custom App Bar
-              _buildAppBar(tripProvider),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: Consumer<TripProvider>(
+          builder: (context, tripProvider, child) {
+            return CustomScrollView(
+              slivers: [
+                // Custom App Bar
+                _buildAppBar(tripProvider),
 
-              // Trip Stats Banner
-              if (_selectedFilter == 'today' || _selectedFilter == 'all') ...[
-                SliverToBoxAdapter(
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: TripStatsBanner(provider: tripProvider),
+                // Trip Stats Banner
+                if (_selectedFilter == 'today' || _selectedFilter == 'all') ...[
+                  SliverToBoxAdapter(
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: TripStatsBanner(provider: tripProvider),
+                    ),
                   ),
-                ),
-              ],
+                ],
 
-              // Filter Chips
-              SliverToBoxAdapter(child: _buildFilterChips()),
+                // Filter Chips
+                SliverToBoxAdapter(child: _buildFilterChips()),
 
-              // Active Trip Card (if any)
-              if (tripProvider.hasActiveTrip) ...[
-                SliverToBoxAdapter(
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ActiveTripCard(
-                        trip: tripProvider.activeTrip!,
-                        onTap:
-                            () =>
-                                _navigateToTripDetail(tripProvider.activeTrip!),
+                // Active Trip Card (if any)
+                if (tripProvider.hasActiveTrip) ...[
+                  SliverToBoxAdapter(
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ActiveTripCard(
+                          trip: tripProvider.activeTrip!,
+                          onTap:
+                              () => _navigateToTripDetail(
+                                tripProvider.activeTrip!,
+                              ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
+
+                // Trips List
+                _buildTripsList(tripProvider),
+
+                // Bottom Padding
+                const SliverToBoxAdapter(child: SizedBox(height: 100)),
               ],
+            );
+          },
+        ),
 
-              // Trips List
-              _buildTripsList(tripProvider),
+        // Floating Action Button
+        floatingActionButton: Consumer<TripProvider>(
+          builder: (context, tripProvider, child) {
+            if (!tripProvider.hasActiveTrip) return const SizedBox.shrink();
 
-              // Bottom Padding
-              const SliverToBoxAdapter(child: SizedBox(height: 100)),
-            ],
-          );
-        },
-      ),
-
-      // Floating Action Button
-      floatingActionButton: Consumer<TripProvider>(
-        builder: (context, tripProvider, child) {
-          if (!tripProvider.hasActiveTrip) return const SizedBox.shrink();
-
-          return FloatingActionButton.extended(
-            onPressed: () => _navigateToTripTracking(tripProvider.activeTrip!),
-            backgroundColor: AppTheme.primaryColor,
-            foregroundColor: Colors.white,
-            icon: const Icon(Icons.navigation),
-            label: const Text('Track Trip'),
-          );
-        },
+            return FloatingActionButton.extended(
+              onPressed:
+                  () => _navigateToTripTracking(tripProvider.activeTrip!),
+              backgroundColor: AppTheme.primaryColor,
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.navigation),
+              label: const Text('Track Trip'),
+            );
+          },
+        ),
       ),
     );
   }
@@ -413,45 +418,48 @@ class _TripsPageState extends State<TripsPage>
         break;
     }
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceColor,
-                shape: BoxShape.circle,
+    return DefaultTabController(
+      length: 3,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 48, color: AppTheme.textTertiaryColor),
               ),
-              child: Icon(icon, size: 48, color: AppTheme.textTertiaryColor),
-            ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimaryColor,
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimaryColor,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            Text(
-              message,
-              style: TextStyle(
-                fontSize: 16,
-                color: AppTheme.textSecondaryColor,
+              Text(
+                message,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppTheme.textSecondaryColor,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            if (action != null) ...[const SizedBox(height: 20), action],
-          ],
+              if (action != null) ...[const SizedBox(height: 20), action],
+            ],
+          ),
         ),
       ),
     );

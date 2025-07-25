@@ -60,79 +60,82 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      body: Consumer<AuthProvider>(
-        builder: (context, authProvider, child) {
-          if (authProvider.isLoading) {
-            return const LoadingIndicator(message: 'Loading profile...');
-          }
-
-          final driver = authProvider.driver;
-
-          if (driver == null) {
-            return const Center(
-              child: Text('Driver information not available'),
-            );
-          }
-
-          return CustomScrollView(
-            slivers: [
-              // Profile Header
-              SliverAppBar(
-                expandedHeight: 300,
-                floating: false,
-                pinned: true,
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: _buildProfileHeader(driver),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () => _showEditProfileDialog(context),
-                    icon: const Icon(Icons.edit),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        body: Consumer<AuthProvider>(
+          builder: (context, authProvider, child) {
+            if (authProvider.isLoading) {
+              return const LoadingIndicator(message: 'Loading profile...');
+            }
+      
+            final driver = authProvider.driver;
+      
+            if (driver == null) {
+              return const Center(
+                child: Text('Driver information not available'),
+              );
+            }
+      
+            return CustomScrollView(
+              slivers: [
+                // Profile Header
+                SliverAppBar(
+                  expandedHeight: 300,
+                  floating: false,
+                  pinned: true,
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: Colors.white,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: _buildProfileHeader(driver),
                   ),
-                ],
-              ),
-
-              // Profile Content
-              SliverToBoxAdapter(
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-
-                        // Stats Cards
-                        _buildStatsSection(driver),
-
-                        const SizedBox(height: 20),
-
-                        // Earnings Summary
-                        EarningsSummaryCard(driver: driver),
-
-                        const SizedBox(height: 20),
-
-                        // Profile Info
-                        ProfileInfoCard(driver: driver),
-
-                        const SizedBox(height: 20),
-
-                        // Menu Items
-                        _buildMenuSection(context),
-
-                        const SizedBox(height: 100),
-                      ],
+                  actions: [
+                    IconButton(
+                      onPressed: () => _showEditProfileDialog(context),
+                      icon: const Icon(Icons.edit),
+                    ),
+                  ],
+                ),
+      
+                // Profile Content
+                SliverToBoxAdapter(
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+      
+                          // Stats Cards
+                          _buildStatsSection(driver),
+      
+                          const SizedBox(height: 20),
+      
+                          // Earnings Summary
+                          EarningsSummaryCard(driver: driver),
+      
+                          const SizedBox(height: 20),
+      
+                          // Profile Info
+                          ProfileInfoCard(driver: driver),
+      
+                          const SizedBox(height: 20),
+      
+                          // Menu Items
+                          _buildMenuSection(context),
+      
+                          const SizedBox(height: 100),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -628,7 +631,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   void _showVehicleInfo(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final driver = authProvider.driver;
+    final vehicle = authProvider.vehicle;
 
     showDialog(
       context: context,
@@ -639,13 +642,13 @@ class _ProfilePageState extends State<ProfilePage>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Plate Number: Unknown'), // TODO: Get from vehicle data
+                Text('Plate Number: ${vehicle?.plateNumber ?? "Unknown"}'),
                 const SizedBox(height: 8),
-                Text('Model: Unknown'),
+                Text('Model: ${vehicle?.model ?? "Unknown"}'),
                 const SizedBox(height: 8),
-                Text('Capacity: Unknown'),
+                Text('Capacity: ${vehicle?.capacity ?? "Unknown"}'),
                 const SizedBox(height: 8),
-                Text('Type: Unknown'),
+                Text('Type: ${vehicle?.vehicleType ?? "Unknown"}'),
               ],
             ),
             actions: [

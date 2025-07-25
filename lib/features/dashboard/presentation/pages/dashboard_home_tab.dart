@@ -8,7 +8,8 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../trip/presentation/providers/trip_provider.dart';
 
 class DashboardHomeTab extends StatefulWidget {
-  const DashboardHomeTab({super.key});
+  final VoidCallback onViewAllTapped;
+  const DashboardHomeTab({super.key, required this.onViewAllTapped});
 
   @override
   State<DashboardHomeTab> createState() => _DashboardHomeTabState();
@@ -49,123 +50,126 @@ class _DashboardHomeTabState extends State<DashboardHomeTab>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return RefreshIndicator(
-      onRefresh: _loadDashboardData,
-      color: AppTheme.primaryColor,
-      child: CustomScrollView(
-        slivers: [
-          // Welcome Header
-          _buildWelcomeHeader(),
+    return DefaultTabController(
+      length: 3,
+      child: RefreshIndicator(
+        onRefresh: _loadDashboardData,
+        color: AppTheme.primaryColor,
+        child: CustomScrollView(
+          slivers: [
+            // Welcome Header
+            _buildWelcomeHeader(),
 
-          // Driver Status Card
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Consumer<AuthProvider>(
-                builder: (context, authProvider, child) {
-                  return DriverStatusCard(driver: authProvider.driver);
-                },
+            // Driver Status Card
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Consumer<AuthProvider>(
+                  builder: (context, authProvider, child) {
+                    return DriverStatusCard(driver: authProvider.driver);
+                  },
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // Active Trip Card (if any)
-          Consumer<TripProvider>(
-            builder: (context, tripProvider, child) {
-              if (tripProvider.hasActiveTrip) {
-                return SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildActiveTripCard(tripProvider.activeTrip!),
-                  ),
-                );
-              }
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            },
-          ),
-
-          // Quick Actions Grid
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: QuickActionsGrid(),
+            // Active Trip Card (if any)
+            Consumer<TripProvider>(
+              builder: (context, tripProvider, child) {
+                if (tripProvider.hasActiveTrip) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _buildActiveTripCard(tripProvider.activeTrip!),
+                    ),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              },
             ),
-          ),
 
-          // Today's Summary Cards
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Consumer<AuthProvider>(
-                      builder: (context, authProvider, child) {
-                        return EarningsSummaryCard(
-                          title: 'Today\'s Earnings',
-                          amount: 0, // This would come from API
-                          period: 'Today',
-                          icon: Icons.monetization_on,
-                          color: AppTheme.successColor,
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Consumer<TripProvider>(
-                      builder: (context, tripProvider, child) {
-                        return TripSummaryCard(
-                          title: 'Completed Trips',
-                          count:
-                              tripProvider.todayTrips
-                                  .where((trip) => trip.status == 'completed')
-                                  .length,
-                          period: 'Today',
-                          icon: Icons.check_circle,
-                          color: AppTheme.primaryColor,
-                        );
-                      },
-                    ),
-                  ),
-                ],
+            // Quick Actions Grid
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: QuickActionsGrid(),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-          // Performance Metrics
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _buildPerformanceMetrics(),
+            // Today's Summary Cards
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Consumer<AuthProvider>(
+                        builder: (context, authProvider, child) {
+                          return EarningsSummaryCard(
+                            title: 'Today\'s Earnings',
+                            amount: 0, // This would come from API
+                            period: 'Today',
+                            icon: Icons.monetization_on,
+                            color: AppTheme.successColor,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Consumer<TripProvider>(
+                        builder: (context, tripProvider, child) {
+                          return TripSummaryCard(
+                            title: 'Completed Trips',
+                            count:
+                                tripProvider.todayTrips
+                                    .where((trip) => trip.status == 'completed')
+                                    .length,
+                            period: 'Today',
+                            icon: Icons.check_circle,
+                            color: AppTheme.primaryColor,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // Recent Notifications
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: NotificationsCard(),
+            // Performance Metrics
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildPerformanceMetrics(),
+              ),
             ),
-          ),
 
-          // Recent Trips
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: _buildRecentTrips(),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+            // Recent Notifications
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: NotificationsCard(),
+              ),
             ),
-          ),
 
-          // Bottom padding
-          const SliverToBoxAdapter(child: SizedBox(height: 100)),
-        ],
+            // Recent Trips
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: _buildRecentTrips(),
+              ),
+            ),
+
+            // Bottom padding
+            const SliverToBoxAdapter(child: SizedBox(height: 100)),
+          ],
+        ),
       ),
     );
   }
@@ -515,79 +519,84 @@ class _DashboardHomeTabState extends State<DashboardHomeTab>
   }
 
   Widget _buildRecentTrips() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Recent Trips',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimaryColor,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to trips page
-                    DefaultTabController.of(context).animateTo(1);
-                  },
-                  child: Text(
-                    'View All',
+    return DefaultTabController(
+      length: 3,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Trips',
                     style: TextStyle(
-                      color: AppTheme.primaryColor,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
-            Consumer<TripProvider>(
-              builder: (context, tripProvider, child) {
-                final List<dynamic> recentTrips =
-                    [
-                      ...tripProvider.todayTrips,
-                      ...tripProvider.trips,
-                    ].take(3).toList();
-
-                if (recentTrips.isEmpty) {
-                  return Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.route_outlined,
-                          size: 48,
-                          color: AppTheme.textSecondaryColor,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'No recent trips',
-                          style: TextStyle(color: AppTheme.textSecondaryColor),
-                        ),
-                      ],
+                  TextButton(
+                    onPressed: () {
+                      // Navigate to trips page
+                      widget.onViewAllTapped();
+                    },
+                    child: Text(
+                      'View All',
+                      style: TextStyle(
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  );
-                }
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
 
-                return Column(
-                  children:
-                      recentTrips.map((trip) {
-                        return _buildRecentTripItem(trip);
-                      }).toList(),
-                );
-              },
-            ),
-          ],
+              Consumer<TripProvider>(
+                builder: (context, tripProvider, child) {
+                  final List<dynamic> recentTrips =
+                      [
+                        ...tripProvider.todayTrips,
+                        ...tripProvider.trips,
+                      ].take(3).toList();
+
+                  if (recentTrips.isEmpty) {
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.route_outlined,
+                            size: 48,
+                            color: AppTheme.textSecondaryColor,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'No recent trips',
+                            style: TextStyle(
+                              color: AppTheme.textSecondaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children:
+                        recentTrips.map((trip) {
+                          return _buildRecentTripItem(trip);
+                        }).toList(),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
