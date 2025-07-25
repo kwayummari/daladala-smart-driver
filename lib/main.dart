@@ -3,6 +3,7 @@ import 'package:daladala_smart_driver/features/profile/presentation/providers/pr
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'core/di/service_locator.dart';
 import 'core/theme/app_theme.dart';
@@ -32,8 +33,20 @@ void main() async {
 
   // Initialize notification service
   // await getIt<NotificationService>().initialize();
+  await requestPermissions();
 
   runApp(const DriverApp());
+}
+
+Future<void> requestPermissions() async {
+  await [
+    Permission.sms,
+    Permission.storage,
+    Permission.notification,
+    Permission.locationAlways,
+    Permission.locationWhenInUse,
+    Permission.location,
+  ].request();
 }
 
 class DriverApp extends StatelessWidget {
@@ -53,6 +66,7 @@ class DriverApp extends StatelessWidget {
           create: (_) => getIt<ProfileProvider>(),
         ),
         ChangeNotifierProvider<QRProvider>(create: (_) => getIt<QRProvider>()),
+        Provider<LocationService>(create: (_) => getIt<LocationService>()),
       ],
       child: MaterialApp(
         title: 'Daladala Smart Driver',

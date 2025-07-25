@@ -627,7 +627,7 @@ class _DashboardHomeTabState extends State<DashboardHomeTab>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  trip.route?.name ?? 'Unknown Route',
+                  trip.route?.routeName ?? 'Unknown Route',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -666,7 +666,7 @@ class _DashboardHomeTabState extends State<DashboardHomeTab>
               ),
               const SizedBox(height: 4),
               Text(
-                'TZS ${(trip.fareAmount ?? 0).toStringAsFixed(0)}',
+                'TZS ${(trip.earnings ?? 0).toStringAsFixed(0)}',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

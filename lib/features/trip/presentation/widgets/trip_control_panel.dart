@@ -16,99 +16,101 @@ class TripControlPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Emergency Button
-          CustomButton(
-            text: 'Emergency Alert',
-            onPressed: () => _showEmergencyDialog(context),
-            type: ButtonType.primary,
-            backgroundColor: AppTheme.errorColor,
-            icon: Icons.warning,
-            height: 48,
-          ),
-
-          const SizedBox(height: 12),
-
-          // Break Button
-          CustomButton(
-            text: 'Take Break',
-            onPressed: () => _showBreakDialog(context),
-            type: ButtonType.secondary,
-            icon: Icons.pause,
-            height: 48,
-          ),
-
-          const SizedBox(height: 12),
-
-          // End Trip Button
-          Consumer<TripProvider>(
-            builder: (context, tripProvider, child) {
-              return CustomButton(
-                text: 'End Trip',
-                onPressed:
-                    tripProvider.isLoading
-                        ? null
-                        : () => _showEndTripDialog(context),
-                type: ButtonType.primary,
-                backgroundColor: AppTheme.warningColor,
-                icon: Icons.stop,
-                height: 48,
-                isLoading: tripProvider.isLoading,
-              );
-            },
-          ),
-
-          const SizedBox(height: 20),
-
-          // Quick Stats
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.surfaceColor,
-              borderRadius: BorderRadius.circular(12),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Emergency Button
+            CustomButton(
+              text: 'Emergency Alert',
+              onPressed: () => _showEmergencyDialog(context),
+              type: ButtonType.primary,
+              backgroundColor: AppTheme.errorColor,
+              icon: Icons.warning,
+              height: 48,
             ),
-            child: Column(
-              children: [
-                Text(
-                  'Trip Summary',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimaryColor,
+
+            const SizedBox(height: 12),
+
+            // Break Button
+            CustomButton(
+              text: 'Take Break',
+              onPressed: () => _showBreakDialog(context),
+              type: ButtonType.secondary,
+              icon: Icons.pause,
+              height: 48,
+            ),
+
+            const SizedBox(height: 12),
+
+            // End Trip Button
+            Consumer<TripProvider>(
+              builder: (context, tripProvider, child) {
+                return CustomButton(
+                  text: 'End Trip',
+                  onPressed:
+                      tripProvider.isLoading
+                          ? null
+                          : () => _showEndTripDialog(context),
+                  type: ButtonType.primary,
+                  backgroundColor: AppTheme.warningColor,
+                  icon: Icons.stop,
+                  height: 48,
+                  isLoading: tripProvider.isLoading,
+                );
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            // Quick Stats
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    'Trip Summary',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildQuickStat(
-                      'Passengers',
-                      '${trip.currentPassengers ?? 0}',
-                      Icons.people,
-                      AppTheme.primaryColor,
-                    ),
-                    _buildQuickStat(
-                      'Capacity',
-                      '${trip.vehicle?.capacity ?? 0}',
-                      Icons.event_seat,
-                      AppTheme.accentColor,
-                    ),
-                    _buildQuickStat(
-                      'Earnings',
-                      'TZS ${(trip.earnings ?? 0).toStringAsFixed(0)}',
-                      Icons.monetization_on,
-                      AppTheme.successColor,
-                    ),
-                  ],
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildQuickStat(
+                        'Passengers',
+                        '${trip.currentPassengers ?? 0}',
+                        Icons.people,
+                        AppTheme.primaryColor,
+                      ),
+                      _buildQuickStat(
+                        'Capacity',
+                        '${trip.vehicle?.capacity ?? 0}',
+                        Icons.event_seat,
+                        AppTheme.accentColor,
+                      ),
+                      _buildQuickStat(
+                        'Earnings',
+                        'TZS ${(trip.earnings ?? 0).toStringAsFixed(0)}',
+                        Icons.monetization_on,
+                        AppTheme.successColor,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -411,9 +411,9 @@ class _ProfilePageState extends State<ProfilePage>
           CustomButton(
             text: 'Logout',
             onPressed: () => _showLogoutDialog(context),
-            type: ButtonType.secondary,
+            type: ButtonType.primary,
             backgroundColor: AppTheme.errorColor,
-            textColor: Colors.white,
+            textColor: AppTheme.white,
             icon: Icons.logout,
             isFullWidth: true,
           ),
