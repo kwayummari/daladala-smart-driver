@@ -3,7 +3,6 @@ import 'package:daladala_smart_driver/features/auth/domain/repositories/auth_rep
 import 'package:get_it/get_it.dart';
 import '../services/api_service.dart';
 import '../services/location_service.dart';
-import '../services/notification_service.dart';
 import '../services/socket_service.dart';
 import '../services/qr_service.dart';
 
