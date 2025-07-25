@@ -1,7 +1,7 @@
 // lib/core/services/api_service.dart
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -30,7 +30,15 @@ class ApiService {
       ),
     );
 
-    // Add request interceptor for authentication
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (
+      HttpClient client,
+    ) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+
+    // Auth interceptor
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -64,6 +72,7 @@ class ApiService {
       ),
     );
   }
+
 
   // Driver Authentication
   Future<Map<String, dynamic>> driverLogin(
